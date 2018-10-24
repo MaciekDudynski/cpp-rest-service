@@ -1,4 +1,4 @@
-#include <NetworkInfoProvider.hpp>
+#include "NetworkInfoProvider.hpp"
 
 namespace rest
 {
@@ -32,7 +32,7 @@ namespace rest
         while( hostInetInfo != end )
         {
             boost::asio::ip::tcp::endpoint ep = *hostInetInfo++;
-            sockaddr sa = *ep.data();
+            sockaddr sa                       = *ep.data();
             if( sa.sa_family == family )
             {
                 return ep.address().to_string();
