@@ -1,0 +1,90 @@
+BasedOnStyle: Mozilla
+AccessModifierOffset: -2
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: false
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
+AlwaysBreakTemplateDeclarations: true
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterObjCDeclaration: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterExternBlock: true
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+BreakBeforeBinaryOperators: None
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializers: BeforeColon
+#BreakInheritanceList: BeforeColon
+BreakStringLiterals: true
+ColumnLimit: 140
+CompactNamespaces: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ConstructorInitializerIndentWidth: 1
+ContinuationIndentWidth: 2
+Cpp11BracedListStyle: false
+DerivePointerAlignment: false
+DisableFormat: false
+# ExperimentalAutoDetectBinPacking: false
+FixNamespaceComments: true
+ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH ]
+IncludeBlocks: Preserve
+# IncludeCategories: 
+# IncludeIsMainRegex: 
+IndentCaseLabels: true
+IndentPPDirectives: AfterHash
+IndentWidth: 4
+IndentWrappedFunctionNames: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+Language: Cpp
+# MacroBlockBegin: 
+# MacroBlockEnd: 
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: All
+# PenaltyBreakAssignment: 
+# PenaltyBreakBeforeFirstCallParameter: 
+# PenaltyBreakComment: 
+# PenaltyBreakFirstLessLess: 
+# PenaltyBreakString: 
+# PenaltyBreakTemplateDeclaration: 
+# PenaltyExcessCharacter: 
+# PenaltyReturnTypeOnItsOwnLine: 
+PointerAlignment: Middle
+# RawStringFormats: 
+ReflowComments: false
+SortIncludes: true
+SortUsingDeclarations: false
+SpaceAfterCStyleCast: true
+SpaceAfterTemplateKeyword: false
+SpaceBeforeAssignmentOperators: true
+# SpaceBeforeCpp11BracedList: false
+# SpaceBeforeCtorInitializerColon: true
+# SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: Never
+# SpaceBeforeRangeBasedForLoopColon: false
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 1
+SpacesInAngles: true
+SpacesInCStyleCastParentheses: true
+SpacesInContainerLiterals: true
+SpacesInParentheses: true
+SpacesInSquareBrackets: true
+Standard: Cpp11
+TabWidth: 4
+UseTab: ForIndentation
