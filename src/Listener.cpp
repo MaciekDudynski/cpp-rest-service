@@ -17,6 +17,7 @@ namespace rest
        _dispatcher{ std::move( dispatcher ) },
        _currentState{ ListenerState::Stopped }
     {
+        /// @todo create UriProvider
         web::uri endpointURI( endpoint );
         web::uri_builder endpointBuilder;
 
@@ -34,22 +35,12 @@ namespace rest
 
         _listener = std::make_unique< web::http::experimental::listener::http_listener >( endpointBuilder.to_uri() );
 
-        _listener->support( std::bind( &DispatcherIface::handleMessage, _dispatcher, std::placeholders::_1 ) );
+        _listener->support( [& dispatcher = *_dispatcher]( auto && message ) { dispatcher.handleMessage( message ); } );
     }
 
     Listener::~Listener()
     {
         stop();
-    }
-
-    std::string Listener::endpoint() const
-    {
-        return _listener->uri().to_string();
-    }
-
-    const ListenerState & Listener::state() const
-    {
-        return _currentState;
     }
 
     void Listener::start()

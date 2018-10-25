@@ -14,7 +14,7 @@ namespace rest
     class DispatcherIface
     {
       public:
-        virtual ~DispatcherIface();
+        virtual ~DispatcherIface() = default;
 
         virtual void registerController( std::unique_ptr< ControllerIface > controller ) = 0;
 

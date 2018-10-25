@@ -22,9 +22,6 @@ namespace rest
           std::unique_ptr< DispatcherIface > dispatcher );
         ~Listener() override;
 
-        std::string endpoint() const override;
-        const ListenerState & state() const override;
-
         void start() override;
         void stop() override;
 
