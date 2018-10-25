@@ -1,6 +1,7 @@
 #pragma once
 
 #include "NetworkInfoProviderIface.hpp"
+
 #include <boost/asio.hpp>
 
 namespace rest
