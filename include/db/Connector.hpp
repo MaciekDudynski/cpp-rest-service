@@ -17,7 +17,7 @@ namespace service::db
         explicit Connector( std::unique_ptr< ConnectionStringProviderIface > connectionStringProvider );
         ~Connector() override;
 
-        void testConnection() const override;
+        void insertOneDocument( const std::string & collectionName, const bsoncxx::document::value & doc_value ) const override;
 
       private:
         std::unique_ptr< mongocxx::instance > _instance;

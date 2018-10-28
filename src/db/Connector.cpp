@@ -2,7 +2,6 @@
 
 #include "db/ConnectionStringProviderIface.hpp"
 
-#include <bsoncxx/builder/stream/document.hpp>
 #include <mongocxx/v_noabi/mongocxx/uri.hpp>
 
 using bsoncxx::builder::stream::close_array;
@@ -29,23 +28,23 @@ namespace service::db
     {
     }
 
-    void Connector::testConnection() const
+    void Connector::insertOneDocument( const std::string & collectionName, const bsoncxx::document::value & doc_value ) const
     {
-        auto db = _client->database( "CppRestService" );
+        auto db         = _client->database( "CppRestService" );
+        auto collection = db.collection( collectionName );
 
-        auto testCollection = db.collection( "test" );
+        //auto builder                       = document{};
+        //bsoncxx::document::value doc_value = builder << "name"
+        //                                             << "MongoDB"
+        //                                             << "type"
+        //                                             << "database"
+        //                                             << "count" << 1 << "versions" << open_array << "v3.2"
+        //                                             << "v3.0"
+        //                                             << "v2.6" << close_array << "info" << open_document << "x" << 203 << "y" << 102
+        //                                             << close_document << finalize;
 
-        auto builder                       = document{};
-        bsoncxx::document::value doc_value = builder << "name"
-                                                     << "MongoDB"
-                                                     << "type"
-                                                     << "database"
-                                                     << "count" << 1 << "versions" << open_array << "v3.2"
-                                                     << "v3.0"
-                                                     << "v2.6" << close_array << "info" << open_document << "x" << 203 << "y" << 102
-                                                     << close_document << finalize;
-
-        bsoncxx::stdx::optional< mongocxx::result::insert_one > result = testCollection.insert_one( doc_value.view() );
+        /*bsoncxx::stdx::optional< mongocxx::result::insert_one > result =*/
+        collection.insert_one( doc_value.view() );
     }
 
 } // namespace service::db

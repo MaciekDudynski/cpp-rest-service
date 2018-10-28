@@ -17,7 +17,6 @@ namespace service
 
     void ControllerTest::handleMessage( web::http::http_request message ) const
     {
-        _dbConnector->testConnection();
         message.reply( web::http::status_codes::NotImplemented, responseNotImpl( message ) );
     }
 
