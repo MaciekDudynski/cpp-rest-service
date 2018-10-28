@@ -3,9 +3,10 @@
 #include <cpprest/http_msg.h>
 #include <cpprest/json.h>
 
-namespace rest
+namespace service
 {
-    ControllerBase::ControllerBase( const std::string & relativePath ) : _relativePath{ relativePath }
+    ControllerBase::ControllerBase( const std::string & relativePath, std::shared_ptr< db::ConnectorIface > dbConnector )
+     : _relativePath{ relativePath }, _dbConnector{ dbConnector }
     {
     }
 
@@ -26,4 +27,4 @@ namespace rest
         response[ "http_method" ]   = web::json::value::string( message.method() );
         return response;
     }
-} // namespace rest
+} // namespace service

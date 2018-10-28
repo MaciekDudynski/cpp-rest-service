@@ -1,10 +1,10 @@
 #pragma once
 
-#include "NetworkInfoProviderIface.hpp"
+#include "utils/NetworkInfoProviderIface.hpp"
 
 #include <boost/asio.hpp>
 
-namespace rest
+namespace service::utils
 {
     class NetworkInfoProvider : public NetworkInfoProviderIface
     {
@@ -18,4 +18,4 @@ namespace rest
         std::string hostIP( unsigned short family ) const;
     };
 
-} // namespace rest
+} // namespace service::utils

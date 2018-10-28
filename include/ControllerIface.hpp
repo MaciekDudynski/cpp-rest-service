@@ -10,7 +10,7 @@ namespace web
     }
 } // namespace web
 
-namespace rest
+namespace service
 {
     class ControllerIface
     {
@@ -20,4 +20,4 @@ namespace rest
         virtual const std::string & relativePath() const                    = 0;
         virtual void handleMessage( web::http::http_request message ) const = 0;
     };
-} // namespace rest
+} // namespace service

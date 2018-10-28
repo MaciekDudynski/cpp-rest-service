@@ -1,6 +1,6 @@
-#include "NetworkInfoProvider.hpp"
+#include "utils/NetworkInfoProvider.hpp"
 
-namespace rest
+namespace service::utils
 {
     std::string NetworkInfoProvider::hostIP4() const
     {
@@ -40,4 +40,4 @@ namespace rest
         }
         return nullptr;
     }
-} // namespace rest
+} // namespace service::utils

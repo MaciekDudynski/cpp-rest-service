@@ -6,7 +6,7 @@
 
 #include <map>
 
-namespace rest
+namespace service
 {
     class ControllerIface;
 
@@ -25,4 +25,4 @@ namespace rest
       private:
         std::map< std::string, std::unique_ptr< ControllerIface > > _registeredControllers;
     };
-} // namespace rest
+} // namespace service

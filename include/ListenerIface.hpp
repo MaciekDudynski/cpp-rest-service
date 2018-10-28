@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace rest
+namespace service
 {
     enum class ListenerState
     {
@@ -18,4 +18,4 @@ namespace rest
         virtual void start() = 0;
         virtual void stop()  = 0;
     };
-} // namespace rest
+} // namespace service

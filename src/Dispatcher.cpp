@@ -1,11 +1,10 @@
 #include "Dispatcher.hpp"
 
 #include "ControllerIface.hpp"
-#include "NetworkInfoProvider.hpp"
 
 #include <cpprest/uri.h>
 
-namespace rest
+namespace service
 {
     Dispatcher::Dispatcher() : _registeredControllers{}
     {
@@ -55,4 +54,4 @@ namespace rest
         }
     }
 
-} // namespace rest
+} // namespace service

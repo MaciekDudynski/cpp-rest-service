@@ -2,11 +2,13 @@
 
 #include "Dispatcher.hpp"
 #include "Listener.hpp"
-#include "NetworkInfoProvider.hpp"
+#include "db/ConnectorFactory.hpp"
+#include "db/ConnectorIface.hpp"
+#include "utils/NetworkInfoProvider.hpp"
 
 #include "ControllerTest.hpp"
 
-namespace rest
+namespace service
 {
     ListenerFactory::ListenerFactory()
     {
@@ -18,15 +20,20 @@ namespace rest
 
     std::unique_ptr< ListenerIface > ListenerFactory::createListener() const
     {
-        auto netInfoProvider = std::make_unique< NetworkInfoProvider >();
+        auto netInfoProvider = std::make_unique< utils::NetworkInfoProvider >();
 
         std::cout << "ListenerFactory is creating dispatcher..." << std::endl;
 
         auto dispatcher = std::make_unique< Dispatcher >();
 
+        std::cout << "ListenerFactory is creating DB connector..." << std::endl;
+
+        auto dbConnectorFactory = std::make_unique< db::ConnectorFactory >();
+        auto dbConnector        = std::shared_ptr< db::ConnectorIface >( dbConnectorFactory->createConnector() );
+
         std::cout << "ListenerFactory is creating and registering controllers..." << std::endl;
 
-        auto testController = std::make_unique< ControllerTest >();
+        auto testController = std::make_unique< ControllerTest >( dbConnector );
         dispatcher->registerController( std::move( testController ) );
 
         std::cout << "ListenerFactory is creating listener..." << std::endl;
@@ -39,4 +46,4 @@ namespace rest
         return std::move( listener );
     }
 
-} // namespace rest
+} // namespace service

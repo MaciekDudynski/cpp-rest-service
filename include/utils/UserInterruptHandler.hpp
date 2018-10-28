@@ -1,6 +1,6 @@
 #pragma once
 
-namespace rest
+namespace service::utils
 {
     class UserInterruptHandler
     {
@@ -9,4 +9,4 @@ namespace rest
         static void handleUserInterrupt( int signal );
         static void waitForUserInterrupt();
     };
-} // namespace rest
+} // namespace service::utils

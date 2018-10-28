@@ -1,0 +1,10 @@
+#pragma once
+
+#include <string>
+
+namespace service::utils
+{
+    inline std::string install_path() {
+        return "@CMAKE_INSTALL_PREFIX@";
+    }
+}

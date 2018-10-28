@@ -1,17 +1,17 @@
 #include "Listener.hpp"
 
 #include "DispatcherIface.hpp"
-#include "NetworkInfoProviderIface.hpp"
+#include "utils/NetworkInfoProviderIface.hpp"
 
 #include <cpprest/http_listener.h>
 #include <cpprest/uri.h>
 
 #include <iostream>
 
-namespace rest
+namespace service
 {
     Listener::Listener( const std::string & endpoint,
-      std::unique_ptr< NetworkInfoProviderIface > networkInfoProvider,
+      std::unique_ptr< utils::NetworkInfoProviderIface > networkInfoProvider,
       std::unique_ptr< DispatcherIface > dispatcher )
      : _networkInfoProvider{ std::move( networkInfoProvider ) },
        _dispatcher{ std::move( dispatcher ) },
@@ -73,4 +73,4 @@ namespace rest
         }
     }
 
-} // namespace rest
+} // namespace service

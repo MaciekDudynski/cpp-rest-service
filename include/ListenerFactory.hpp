@@ -1,19 +1,17 @@
 #pragma once
 
-#include "ListenerFactoryIface.hpp"
-
 #include <memory>
 
-namespace rest
+namespace service
 {
     class ListenerIface;
 
-    class ListenerFactory : public ListenerFactoryIface
+    class ListenerFactory
     {
       public:
         explicit ListenerFactory();
-        ~ListenerFactory() override;
+        ~ListenerFactory();
 
         std::unique_ptr< ListenerIface > createListener() const;
     };
-} // namespace rest
+} // namespace service

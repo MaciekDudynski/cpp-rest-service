@@ -1,11 +1,13 @@
 #include "ControllerTest.hpp"
 
+#include "db/ConnectorIface.hpp"
+
 #include <cpprest/http_msg.h>
 #include <cpprest/json.h>
 
-namespace rest
+namespace service
 {
-    ControllerTest::ControllerTest() : ControllerBase( "/test" )
+    ControllerTest::ControllerTest( std::shared_ptr< db::ConnectorIface > dbConnector ) : ControllerBase( "/test", dbConnector )
     {
     }
 
@@ -15,7 +17,8 @@ namespace rest
 
     void ControllerTest::handleMessage( web::http::http_request message ) const
     {
+        _dbConnector->testConnection();
         message.reply( web::http::status_codes::NotImplemented, responseNotImpl( message ) );
     }
 
-} // namespace rest
+} // namespace service

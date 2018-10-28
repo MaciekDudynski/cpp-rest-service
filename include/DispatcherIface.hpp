@@ -7,7 +7,7 @@ namespace web::http
     class http_request;
 }
 
-namespace rest
+namespace service
 {
     class ControllerIface;
 
@@ -20,4 +20,4 @@ namespace rest
 
         virtual void handleMessage( const web::http::http_request & message ) const = 0;
     };
-} // namespace rest
+} // namespace service

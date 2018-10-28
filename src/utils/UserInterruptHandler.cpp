@@ -1,4 +1,4 @@
-#include "UserInterruptHandler.hpp"
+#include "utils/UserInterruptHandler.hpp"
 
 #include <condition_variable>
 #include <iostream>
@@ -8,7 +8,7 @@
 static std::condition_variable _condition;
 static std::mutex _mutex;
 
-namespace rest
+namespace service::utils
 {
     void UserInterruptHandler::hookSIGINT()
     {
@@ -32,4 +32,4 @@ namespace rest
         lock.unlock();
     }
 
-} // namespace rest
+} // namespace service::utils

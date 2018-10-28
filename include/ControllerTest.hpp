@@ -7,14 +7,14 @@ namespace web::json
     class value;
 }
 
-namespace rest
+namespace service
 {
     class ControllerTest : public ControllerBase
     {
       public:
-        ControllerTest();
+        ControllerTest( std::shared_ptr< db::ConnectorIface > dbConnector );
         ~ControllerTest() override;
 
         void handleMessage( web::http::http_request message ) const override;
     };
-} // namespace rest
+} // namespace service
