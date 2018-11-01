@@ -1,7 +1,7 @@
-# /opt/cpp-rest-service
+# cpp-rest-service
 Simple REST service using cpprestsdk and mongoDB.
 
-### Instalation
+### Installation
 Set CMAKE_INSTALL_PREFIX variable to '/opt/cpp-rest-service'.
 
 ### Run
@@ -13,4 +13,4 @@ To build docker image:
 1. Install project in '/opt/cpp-rest-service'.
 2. Go to 'docker' directory in sources.
 3. Run 'build_docker.sh'.
-
+To start docker just run 'run_docker.sh'.
