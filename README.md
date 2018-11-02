@@ -9,7 +9,7 @@ Make a file named 'db_connection_string' containing only mongoDB connection stri
 And then just run cpp-rest-service executable.
 
 ### Docker (not working!)
-# Program is crashing while the mongocxx::uri is being created
+##### Program is crashing while the mongocxx::uri is being created
 
 To build docker image:
 1. Install project in '/opt/cpp-rest-service'.
