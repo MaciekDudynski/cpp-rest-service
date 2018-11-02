@@ -6,7 +6,7 @@
 #include "db/ConnectorIface.hpp"
 #include "utils/NetworkInfoProvider.hpp"
 
-#include "ControllerTest.hpp"
+#include "controllers/Test.hpp"
 
 namespace service
 {
@@ -33,7 +33,7 @@ namespace service
 
         std::cout << "ListenerFactory is creating and registering controllers..." << std::endl;
 
-        auto testController = std::make_unique< ControllerTest >( dbConnector );
+        auto testController = std::make_unique< controllers::Test >( dbConnector );
         dispatcher->registerController( std::move( testController ) );
 
         std::cout << "ListenerFactory is creating listener..." << std::endl;

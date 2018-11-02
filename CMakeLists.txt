@@ -17,9 +17,11 @@ file(GLOB RestService_SRC
     include/*.hpp
     include/db/*.hpp
     include/utils/*.hpp
+    include/controllers/*.hpp
     src/*.cpp
     src/db/*.cpp
-    src/utils/*.cpp)
+    src/utils/*.cpp
+    src/controllers/*.cpp)
 add_executable(${PROJECT_NAME} ${RestService_SRC})
 
 target_include_directories(${PROJECT_NAME}
