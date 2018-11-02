@@ -2,6 +2,7 @@
 
 #include "db/ConnectionStringProviderIface.hpp"
 
+#include <iostream>
 #include <mongocxx/v_noabi/mongocxx/uri.hpp>
 
 using bsoncxx::builder::stream::close_array;
@@ -11,16 +12,19 @@ using bsoncxx::builder::stream::finalize;
 using bsoncxx::builder::stream::open_array;
 using bsoncxx::builder::stream::open_document;
 
-#include <iostream>
-
 namespace service::db
 {
     Connector::Connector( std::unique_ptr< ConnectionStringProviderIface > connectionStringProvider )
     {
-        _instance             = std::make_unique< mongocxx::instance >(); // This should be done only once.
+        std::cout << "DB connector is creating mongoDB driver instance..." << std::endl;
+        _instance             = std::make_unique< mongocxx::instance >();
         auto connectionString = connectionStringProvider->connectionString();
-        _client               = std::make_unique< mongocxx::client >( mongocxx::uri( connectionString ) );
+        std::cout << "DB connector is creating mongoDB uri..." << std::endl;
+        auto uri = mongocxx::uri( connectionString );
+        std::cout << "DB connector is creating mongoDB client..." << std::endl;
+        _client = std::make_unique< mongocxx::client >( uri );
         /// test
+        std::cout << "DB connector is testing connection to mongoDB..." << std::endl;
         _client->list_databases();
     }
 
@@ -30,7 +34,7 @@ namespace service::db
 
     void Connector::insertOneDocument( const std::string & collectionName, const bsoncxx::document::value & doc_value ) const
     {
-        auto db         = _client->database( "CppRestService" );
+        auto db         = _client->database( "cpp-rest-service" );
         auto collection = db.collection( collectionName );
 
         //auto builder                       = document{};
