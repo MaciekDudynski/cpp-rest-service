@@ -53,6 +53,7 @@ namespace service
             case ListenerState::Stopped:
                 std::cout << "Starting listener..." << std::endl;
                 _listener->open();
+                _currentState = ListenerState::Started;
                 std::cout << "Listening started at: " << _listener->uri().to_string() << std::endl;
                 break;
         }
@@ -65,6 +66,7 @@ namespace service
             case ListenerState::Started:
                 std::cout << "Stoping listener..." << std::endl;
                 _listener->close();
+                _currentState = ListenerState::Stopped;
                 std::cout << "Listener stopped." << std::endl;
                 break;
             case ListenerState::Stopped:

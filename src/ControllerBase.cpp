@@ -22,7 +22,7 @@ namespace service
     web::json::value ControllerBase::responseNotImpl( const web::http::http_request & message ) const
     {
         auto response               = web::json::value::object();
-        response[ "service_name" ]  = web::json::value::string( "CppRestService" );
+        response[ "service_name" ]  = web::json::value::string( "cpp-rest-service" );
         response[ "relative_path" ] = web::json::value::string( relativePath() );
         response[ "http_method" ]   = web::json::value::string( message.method() );
         return response;

@@ -40,15 +40,16 @@ namespace service
             std::cout << "Dispatcher didn't found suitable controller. Available endpoints:" << std::endl;
 
             auto response               = web::json::value::object();
-            response[ "service_name" ]  = web::json::value::string( "CppRestService" );
+            response[ "service_name" ]  = web::json::value::string( "cpp-rest-service" );
             response[ "relative_path" ] = web::json::value::string( message.relative_uri().to_string() );
             response[ "http_method" ]   = web::json::value::string( message.method() );
             std::vector< web::json::value > availableEndpoints;
             for( const auto & controller : _registeredControllers )
             {
-                std::cout << controller.second->relativePath() << std::endl;
+                std::cout << controller.second->relativePath() << ", ";
                 availableEndpoints.emplace_back( controller.second->relativePath() );
             }
+            std::cout << std::endl;
             response[ "available_endpoints" ] = web::json::value::array( availableEndpoints );
             message.reply( web::http::status_codes::NotFound, response );
         }
