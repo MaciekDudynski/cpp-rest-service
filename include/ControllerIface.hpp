@@ -17,7 +17,7 @@ namespace service
       public:
         virtual ~ControllerIface() = default;
 
-        virtual const std::string & relativePath() const                    = 0;
-        virtual void handleMessage( web::http::http_request message ) const = 0;
+        virtual const std::string & relativePath() const                            = 0;
+        virtual void handleMessage( const web::http::http_request & message ) const = 0;
     };
 } // namespace service

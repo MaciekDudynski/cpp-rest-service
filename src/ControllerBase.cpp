@@ -1,5 +1,7 @@
 #include "ControllerBase.hpp"
 
+#include "utils/MethodId.hpp"
+
 #include <cpprest/http_msg.h>
 #include <cpprest/json.h>
 
@@ -14,9 +16,40 @@ namespace service
     {
     }
 
+    void ControllerBase::handleMessage( const web::http::http_request & message ) const
+    {
+        switch( utils::getMethodId( message ) )
+        {
+            case utils::MethodId::Get:
+                handleGet( message );
+                break;
+            case utils::MethodId::Post:
+                handlePost( message );
+                break;
+            case utils::MethodId::UNKNOWN:
+                handleUnknown( message );
+                break;
+        }
+    }
+
     const std::string & ControllerBase::relativePath() const
     {
         return _relativePath;
+    }
+
+    void ControllerBase::handleGet( const web::http::http_request & message ) const
+    {
+        message.reply( web::http::status_codes::NotImplemented, responseNotImpl( message ) );
+    }
+
+    void ControllerBase::handlePost( const web::http::http_request & message ) const
+    {
+        message.reply( web::http::status_codes::NotImplemented, responseNotImpl( message ) );
+    }
+
+    void ControllerBase::handleUnknown( const web::http::http_request & message ) const
+    {
+        message.reply( web::http::status_codes::NotImplemented, responseNotImpl( message ) );
     }
 
     web::json::value ControllerBase::responseNotImpl( const web::http::http_request & message ) const

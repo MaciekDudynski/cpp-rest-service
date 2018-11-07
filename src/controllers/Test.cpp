@@ -15,7 +15,7 @@ namespace service::controllers
     {
     }
 
-    void Test::handleMessage( web::http::http_request message ) const
+    void Test::handleGet( const web::http::http_request & message ) const
     {
         message.reply( web::http::status_codes::NotImplemented, responseNotImpl( message ) );
     }

@@ -15,7 +15,7 @@ namespace service::controllers
     {
     }
 
-    void About::handleMessage( web::http::http_request message ) const
+    void About::handleGet( const web::http::http_request & message ) const
     {
         auto response              = web::json::value::object();
         response[ "service_name" ] = web::json::value::string( "cpp-rest-service" );

@@ -7,6 +7,7 @@
 #include "utils/NetworkInfoProvider.hpp"
 
 #include "controllers/About.hpp"
+#include "controllers/Registration.hpp"
 #include "controllers/Test.hpp"
 
 namespace service
@@ -38,6 +39,8 @@ namespace service
         dispatcher->registerController( std::move( testController ) );
         auto aboutController = std::make_unique< controllers::About >( dbConnector );
         dispatcher->registerController( std::move( aboutController ) );
+        auto registrationController = std::make_unique< controllers::Registration >( dbConnector );
+        dispatcher->registerController( std::move( registrationController ) );
 
         std::cout << "ListenerFactory is creating listener..." << std::endl;
 

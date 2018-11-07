@@ -35,7 +35,7 @@ namespace service
 
         _listener = std::make_unique< web::http::experimental::listener::http_listener >( endpointBuilder.to_uri() );
 
-        _listener->support( [& dispatcher = *_dispatcher]( auto && message ) { dispatcher.handleMessage( message ); } );
+        _listener->support( [& dispatcher = *_dispatcher]( const auto && message ) { dispatcher.handleMessage( message ); } );
     }
 
     Listener::~Listener()
