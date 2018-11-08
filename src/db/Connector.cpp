@@ -3,6 +3,7 @@
 #include "db/ConnectionStringProviderIface.hpp"
 
 #include <iostream>
+#include <mongocxx/v_noabi/mongocxx/client.hpp>
 #include <mongocxx/v_noabi/mongocxx/uri.hpp>
 
 using bsoncxx::builder::stream::close_array;
@@ -21,11 +22,26 @@ namespace service::db
         auto connectionString = connectionStringProvider->connectionString();
         std::cout << "DB connector is creating mongoDB uri..." << std::endl;
         auto uri = mongocxx::uri( connectionString );
-        std::cout << "DB connector is creating mongoDB client..." << std::endl;
-        _client = std::make_unique< mongocxx::client >( uri );
+        std::cout << "DB connector is creating mongoDB pool..." << std::endl;
+        _pool = std::make_unique< mongocxx::pool >( uri );
+
         /// test
         std::cout << "DB connector is testing connection to mongoDB..." << std::endl;
-        _client->list_databases();
+        try
+        {
+            auto client                        = _pool->acquire();
+            auto db                            = client->database( "cpp-rest-service" );
+            auto collection                    = db.collection( "users" );
+            auto builder                       = bsoncxx::builder::stream::document{};
+            bsoncxx::document::value doc_value = builder << "login"
+                                                         << "test" << bsoncxx::builder::stream::finalize;
+            auto found = collection.find_one( doc_value.view() ).value();
+            std::cout << found.view()[ "login" ].get_utf8().value << std::endl;
+        }
+        catch( const std::exception & e )
+        {
+            std::cout << e.what() << std::endl;
+        }
     }
 
     Connector::~Connector()
@@ -34,20 +50,10 @@ namespace service::db
 
     void Connector::insertOneDocument( const std::string & collectionName, const bsoncxx::document::value & doc_value ) const
     {
-        auto db         = _client->database( "cpp-rest-service" );
+        auto client     = _pool->acquire();
+        auto db         = client->database( "cpp-rest-service" );
         auto collection = db.collection( collectionName );
 
-        //auto builder                       = document{};
-        //bsoncxx::document::value doc_value = builder << "name"
-        //                                             << "MongoDB"
-        //                                             << "type"
-        //                                             << "database"
-        //                                             << "count" << 1 << "versions" << open_array << "v3.2"
-        //                                             << "v3.0"
-        //                                             << "v2.6" << close_array << "info" << open_document << "x" << 203 << "y" << 102
-        //                                             << close_document << finalize;
-
-        /*bsoncxx::stdx::optional< mongocxx::result::insert_one > result =*/
         collection.insert_one( doc_value.view() );
     }
 
