@@ -1,6 +1,7 @@
 #include "controllers/Registration.hpp"
 
 #include "db/ConnectorIface.hpp"
+#include "models/User.hpp"
 
 #include <cpprest/http_msg.h>
 #include <cpprest/json.h>
@@ -18,27 +19,31 @@ namespace service::controllers
 
     void Registration::handlePost( const web::http::http_request & message ) const
     {
-        message.extract_json().then( [message, &db = *_dbConnector]( const web::json::value & body ) {
-            auto response = web::json::value::object();
+        std::cout << "Registration controller is handling message..." << std::endl;
 
-            if( body.has_string_field( "login" ) && body.has_string_field( "password" ) )
-            {
-                const auto & login    = body.at( "login" ).as_string();
-                const auto & password = body.at( "password" ).as_string();
+        message.extract_json()
+          .then( [&message, &db = _dbConnector]( const web::json::value & body ) {
+              auto response = web::json::value::object();
 
-                auto builder                       = bsoncxx::builder::stream::document{};
-                bsoncxx::document::value doc_value = builder << "login" << login << "password" << password
-                                                             << bsoncxx::builder::stream::finalize;
+              if( body.has_string_field( "login" ) && body.has_string_field( "password" ) )
+              {
+                  auto user = models::User( body );
 
-                db.insertOneDocument( "users", doc_value );
-
-                message.reply( web::http::status_codes::Created, response );
-            }
-            else
-            {
-                message.reply( web::http::status_codes::BadRequest, response );
-            }
-        } );
+                  if( db->insert( user ) )
+                  {
+                      message.reply( web::http::status_codes::Created, response );
+                  }
+                  else
+                  {
+                      message.reply( web::http::status_codes::Conflict, response );
+                  }
+              }
+              else
+              {
+                  message.reply( web::http::status_codes::BadRequest, response );
+              }
+          } )
+          .wait();
     }
 
 } // namespace service::controllers

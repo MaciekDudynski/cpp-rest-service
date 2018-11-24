@@ -9,7 +9,7 @@ find_package(Boost REQUIRED COMPONENTS system thread log program_options chrono)
 find_package(Threads REQUIRED)
 find_package(OpenSSL 1.0.1 REQUIRED)
 find_package(cpprestsdk REQUIRED)
-find_package(libmongocxx 3.4.0 REQUIRED)
+#find_package(pqxx REQUIRED)
 
 configure_file(config/Configuration.hpp.in ${CMAKE_SOURCE_DIR}/include/utils/Configuration.hpp)
 
@@ -18,22 +18,19 @@ file(GLOB RestService_SRC
     include/db/*.hpp
     include/utils/*.hpp
     include/controllers/*.hpp
+    include/models/*.hpp
     src/*.cpp
     src/db/*.cpp
     src/utils/*.cpp
-    src/controllers/*.cpp)
+    src/controllers/*.cpp
+    src/models/*.cpp)
 add_executable(${PROJECT_NAME} ${RestService_SRC})
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
     ${PROJECT_SOURCE_DIR}/include
-    ${LIBMONGOCXX_INCLUDE_DIRS}
 )
 
-target_compile_definitions(${PROJECT_NAME}
-  PRIVATE ${LIBMONGOCXX_DEFINITIONS}
-)
-
-target_link_libraries(${PROJECT_NAME} boost_system ssl crypto pthread cpprest ${LIBMONGOCXX_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} boost_system ssl crypto pthread cpprest pqxx)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION .)

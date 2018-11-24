@@ -18,4 +18,17 @@ To build docker image:
 
 To start docker just run 'run_docker.sh'.
 
-
+### PostgreSQL
+1. Install with 'sudo pacman -S postgresql'.
+2. Then configure with:
+sudo su postgres -l
+initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data/'
+exit
+3. Start and enable postgresql.service:
+sudo systemctl enable postgresql.service
+sudo systemctl start postgresql.service
+4. Create DB and user:
+sudo su postgres -l
+createuser --interactive
+createdb cpp-rest-service
+exit

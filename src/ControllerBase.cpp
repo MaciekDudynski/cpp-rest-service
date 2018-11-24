@@ -30,6 +30,8 @@ namespace service
                 handleUnknown( message );
                 break;
         }
+
+        std::cout << "Controller finnished handling message." << std::endl;
     }
 
     const std::string & ControllerBase::relativePath() const

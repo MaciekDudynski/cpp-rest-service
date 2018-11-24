@@ -1,60 +1,59 @@
 #include "db/Connector.hpp"
 
+#include "ModelIface.hpp"
 #include "db/ConnectionStringProviderIface.hpp"
 
 #include <iostream>
-#include <mongocxx/v_noabi/mongocxx/client.hpp>
-#include <mongocxx/v_noabi/mongocxx/uri.hpp>
-
-using bsoncxx::builder::stream::close_array;
-using bsoncxx::builder::stream::close_document;
-using bsoncxx::builder::stream::document;
-using bsoncxx::builder::stream::finalize;
-using bsoncxx::builder::stream::open_array;
-using bsoncxx::builder::stream::open_document;
 
 namespace service::db
 {
     Connector::Connector( std::unique_ptr< ConnectionStringProviderIface > connectionStringProvider )
     {
-        std::cout << "DB connector is creating mongoDB driver instance..." << std::endl;
-        _instance             = std::make_unique< mongocxx::instance >();
+        std::cout << "DB connector is getting connection string..." << std::endl;
         auto connectionString = connectionStringProvider->connectionString();
-        std::cout << "DB connector is creating mongoDB uri..." << std::endl;
-        auto uri = mongocxx::uri( connectionString );
-        std::cout << "DB connector is creating mongoDB pool..." << std::endl;
-        _pool = std::make_unique< mongocxx::pool >( uri );
 
-        /// test
-        std::cout << "DB connector is testing connection to mongoDB..." << std::endl;
-        try
-        {
-            auto client                        = _pool->acquire();
-            auto db                            = client->database( "cpp-rest-service" );
-            auto collection                    = db.collection( "users" );
-            auto builder                       = bsoncxx::builder::stream::document{};
-            bsoncxx::document::value doc_value = builder << "login"
-                                                         << "test" << bsoncxx::builder::stream::finalize;
-            auto found = collection.find_one( doc_value.view() ).value();
-            std::cout << found.view()[ "login" ].get_utf8().value << std::endl;
-        }
-        catch( const std::exception & e )
-        {
-            std::cout << e.what() << std::endl;
-        }
+        std::cout << "DB connector is creating connection..." << std::endl;
+        _connection = std::make_unique< pqxx::connection >( connectionString );
     }
 
     Connector::~Connector()
     {
     }
 
-    void Connector::insertOneDocument( const std::string & collectionName, const bsoncxx::document::value & doc_value ) const
+    bool Connector::insert( const ModelIface & object ) const
     {
-        auto client     = _pool->acquire();
-        auto db         = client->database( "cpp-rest-service" );
-        auto collection = db.collection( collectionName );
+        const auto & serializedObject = object.serialize();
 
-        collection.insert_one( doc_value.view() );
+        std::string cmd1 = "INSERT INTO " + object.tableName() + " (";
+        std::string cmd2 = "VALUES (";
+        for( auto lineIt = serializedObject.begin(); lineIt != serializedObject.end(); lineIt = std::next( lineIt ) )
+        {
+            if( lineIt != serializedObject.begin() )
+            {
+                cmd1 += ", ";
+                cmd2 += ", ";
+            }
+            cmd1 += lineIt->first;
+            cmd2 += "'" + lineIt->second + "'";
+        }
+        cmd1 += ") ";
+        cmd2 += ")";
+
+        auto cmd = cmd1 + cmd2;
+        std::cout << "DB connector is executing command: " + cmd << std::endl;
+
+        pqxx::work job( *_connection );
+        try
+        {
+            job.exec( cmd );
+            job.commit();
+        }
+        catch( const pqxx::unique_violation & )
+        {
+            return false;
+        }
+
+        return true;
     }
 
 } // namespace service::db

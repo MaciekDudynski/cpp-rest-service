@@ -1,15 +1,19 @@
 #pragma once
 
-#include <bsoncxx/builder/stream/document.hpp>
 #include <string>
 
-namespace service::db
+namespace service
 {
-    class ConnectorIface
-    {
-      public:
-        virtual ~ConnectorIface() = default;
+    class ModelIface;
 
-        virtual void insertOneDocument( const std::string & collectionName, const bsoncxx::document::value & doc_value ) const = 0;
-    };
-} // namespace service::db
+    namespace db
+    {
+        class ConnectorIface
+        {
+          public:
+            virtual ~ConnectorIface() = default;
+
+            virtual bool insert( const ModelIface & object ) const = 0;
+        };
+    } // namespace db
+} // namespace service
