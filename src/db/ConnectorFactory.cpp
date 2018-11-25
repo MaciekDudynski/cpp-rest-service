@@ -15,7 +15,7 @@ namespace service::db
     {
     }
 
-    std::unique_ptr< ConnectorIface > ConnectorFactory::createConnector() const
+    std::unique_ptr< Connector > ConnectorFactory::createConnector() const
     {
         std::cout << "ConnectorFactory is creating DB ceonnection string provider..." << std::endl;
 

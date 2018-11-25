@@ -7,7 +7,7 @@
 
 namespace service
 {
-    ControllerBase::ControllerBase( const std::string & relativePath, std::shared_ptr< db::ConnectorIface > dbConnector )
+    ControllerBase::ControllerBase( const std::string & relativePath, std::shared_ptr< db::Connector > dbConnector )
      : _relativePath{ relativePath }, _dbConnector{ dbConnector }
     {
     }

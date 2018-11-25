@@ -1,6 +1,5 @@
 #include "db/Connector.hpp"
 
-#include "ModelIface.hpp"
 #include "db/ConnectionStringProviderIface.hpp"
 
 #include <iostream>
@@ -40,7 +39,7 @@ namespace service::db
         cmd2 += ")";
 
         auto cmd = cmd1 + cmd2;
-        std::cout << "DB connector is executing command: " + cmd << std::endl;
+        std::cout << "DB connector is executing command: " << cmd << std::endl;
 
         pqxx::work job( *_connection );
         try
@@ -50,6 +49,11 @@ namespace service::db
         }
         catch( const pqxx::unique_violation & )
         {
+            return false;
+        }
+        catch( const std::exception & e )
+        {
+            std::cout << "DB connector command execution returned: " << e.what() << std::endl;
             return false;
         }
 

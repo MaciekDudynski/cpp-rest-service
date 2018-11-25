@@ -1,13 +1,13 @@
 #include "controllers/About.hpp"
 
-#include "db/ConnectorIface.hpp"
+#include "db/Connector.hpp"
 
 #include <cpprest/http_msg.h>
 #include <cpprest/json.h>
 
 namespace service::controllers
 {
-    About::About( std::shared_ptr< db::ConnectorIface > dbConnector ) : ControllerBase( "/about", dbConnector )
+    About::About( std::shared_ptr< db::Connector > dbConnector ) : ControllerBase( "/about", dbConnector )
     {
     }
 

@@ -2,13 +2,13 @@
 
 #include "Dispatcher.hpp"
 #include "Listener.hpp"
+#include "db/Connector.hpp"
 #include "db/ConnectorFactory.hpp"
-#include "db/ConnectorIface.hpp"
 #include "utils/NetworkInfoProvider.hpp"
 
 #include "controllers/About.hpp"
+#include "controllers/Login.hpp"
 #include "controllers/Registration.hpp"
-#include "controllers/Test.hpp"
 
 namespace service
 {
@@ -31,16 +31,16 @@ namespace service
         std::cout << "ListenerFactory is creating DB connector..." << std::endl;
 
         auto dbConnectorFactory = std::make_unique< db::ConnectorFactory >();
-        auto dbConnector        = std::shared_ptr< db::ConnectorIface >( dbConnectorFactory->createConnector() );
+        auto dbConnector        = std::shared_ptr< db::Connector >( dbConnectorFactory->createConnector() );
 
         std::cout << "ListenerFactory is creating and registering controllers..." << std::endl;
 
-        auto testController = std::make_unique< controllers::Test >( dbConnector );
-        dispatcher->registerController( std::move( testController ) );
         auto aboutController = std::make_unique< controllers::About >( dbConnector );
         dispatcher->registerController( std::move( aboutController ) );
         auto registrationController = std::make_unique< controllers::Registration >( dbConnector );
         dispatcher->registerController( std::move( registrationController ) );
+        auto loginController = std::make_unique< controllers::Login >( dbConnector );
+        dispatcher->registerController( std::move( loginController ) );
 
         std::cout << "ListenerFactory is creating listener..." << std::endl;
 

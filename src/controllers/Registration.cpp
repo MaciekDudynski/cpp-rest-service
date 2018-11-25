@@ -1,6 +1,6 @@
 #include "controllers/Registration.hpp"
 
-#include "db/ConnectorIface.hpp"
+#include "db/Connector.hpp"
 #include "models/User.hpp"
 
 #include <cpprest/http_msg.h>
@@ -9,7 +9,7 @@
 
 namespace service::controllers
 {
-    Registration::Registration( std::shared_ptr< db::ConnectorIface > dbConnector ) : ControllerBase( "/registration", dbConnector )
+    Registration::Registration( std::shared_ptr< db::Connector > dbConnector ) : ControllerBase( "/registration", dbConnector )
     {
     }
 

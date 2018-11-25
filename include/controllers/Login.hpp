@@ -9,11 +9,11 @@ namespace web::json
 
 namespace service::controllers
 {
-    class Registration : public ControllerBase
+    class Login : public ControllerBase
     {
       public:
-        Registration( std::shared_ptr< db::Connector > dbConnector );
-        ~Registration() override;
+        Login( std::shared_ptr< db::Connector > dbConnector );
+        ~Login() override;
 
       private:
         void handlePost( const web::http::http_request & message ) const override;

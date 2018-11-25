@@ -13,13 +13,13 @@ namespace service
 {
     namespace db
     {
-        class ConnectorIface;
+        class Connector;
     }
 
     class ControllerBase : public ControllerIface
     {
       public:
-        ControllerBase( const std::string & relativePath, std::shared_ptr< db::ConnectorIface > dbConnector );
+        ControllerBase( const std::string & relativePath, std::shared_ptr< db::Connector > dbConnector );
         virtual ~ControllerBase() override;
 
         void handleMessage( const web::http::http_request & message ) const override;
@@ -34,6 +34,6 @@ namespace service
         web::json::value responseNotImpl( const web::http::http_request & message ) const;
 
         std::string _relativePath;
-        std::shared_ptr< db::ConnectorIface > _dbConnector;
+        std::shared_ptr< db::Connector > _dbConnector;
     };
 } // namespace service

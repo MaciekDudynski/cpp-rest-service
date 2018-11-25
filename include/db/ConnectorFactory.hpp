@@ -4,7 +4,7 @@
 
 namespace service::db
 {
-    class ConnectorIface;
+    class Connector;
 
     class ConnectorFactory
     {
@@ -12,6 +12,6 @@ namespace service::db
         explicit ConnectorFactory();
         ~ConnectorFactory();
 
-        std::unique_ptr< ConnectorIface > createConnector() const;
+        std::unique_ptr< Connector > createConnector() const;
     };
 } // namespace service::db
