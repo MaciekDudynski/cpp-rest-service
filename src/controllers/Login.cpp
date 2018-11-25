@@ -62,6 +62,11 @@ namespace service::controllers
                   const auto & userFilter = models::User( body );
                   const auto & foundUsers = db->select< models::User >( userFilter );
 
+                  if( foundUsers.size() == 0 )
+                  {
+                      message.reply( web::http::status_codes::Unauthorized, response );
+                      return;
+                  }
                   if( foundUsers.size() == 1 )
                   {
                       const auto & user = foundUsers.at( 0 );
@@ -100,12 +105,19 @@ namespace service::controllers
                                 foundSession.ip().value(),
                                 currentTimestamp() );
 
-                              db->update< models::Session >( foundSession, updatedSession );
+                              if( db->update< models::Session >( foundSession, updatedSession ) )
+                              {
+                                  response[ "token" ] = web::json::value::string( foundSession.token().value() );
 
-                              response[ "token" ] = web::json::value::string( foundSession.token().value() );
-
-                              message.reply( web::http::status_codes::OK, response );
-                              return;
+                                  message.reply( web::http::status_codes::OK, response );
+                                  return;
+                              }
+                              else
+                              {
+                                  /// @note probably not unique token
+                                  message.reply( web::http::status_codes::InternalError, response );
+                                  return;
+                              }
                           }
                           else
                           {
@@ -115,12 +127,19 @@ namespace service::controllers
                                 foundSession.ip().value(),
                                 currentTimestamp() );
 
-                              db->update< models::Session >( foundSession, updatedSession );
+                              if( db->update< models::Session >( foundSession, updatedSession ) )
+                              {
+                                  response[ "token" ] = web::json::value::string( updatedSession.token().value() );
 
-                              response[ "token" ] = web::json::value::string( updatedSession.token().value() );
-
-                              message.reply( web::http::status_codes::OK, response );
-                              return;
+                                  message.reply( web::http::status_codes::OK, response );
+                                  return;
+                              }
+                              else
+                              {
+                                  /// @note probably not unique token
+                                  message.reply( web::http::status_codes::InternalError, response );
+                                  return;
+                              }
                           }
                       }
                       else if( foundSessions.size() > 1 )
@@ -132,7 +151,7 @@ namespace service::controllers
                   }
                   else
                   {
-                      message.reply( web::http::status_codes::Unauthorized, response );
+                      message.reply( web::http::status_codes::InternalError, response );
                       return;
                   }
               }
