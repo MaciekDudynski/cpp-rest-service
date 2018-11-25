@@ -26,7 +26,7 @@ namespace service::models
         _token     = row.at( row.column_number( "token" ) ).as< std::string >();
         _userId    = row.at( row.column_number( "user_id" ) ).as< long >();
         _ip        = row.at( row.column_number( "ip" ) ).as< std::string >();
-        _timestamp = row.at( row.column_number( "timestamp" ) ).as< long >();
+        _timestamp = row.at( row.column_number( "time" ) ).as< long >();
     }
 
     Session::~Session()

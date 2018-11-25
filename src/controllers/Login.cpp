@@ -27,6 +27,16 @@ namespace
     {
         return std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::system_clock::now().time_since_epoch() ).count();
     }
+
+    inline long sessionTimeout()
+    {
+        return std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::hours( 1 ) ).count();
+    }
+
+    inline bool sessionIsStillValid( const service::models::Session & session )
+    {
+        return session.timestamp().value() + sessionTimeout() >= currentTimestamp();
+    }
 } // namespace
 
 namespace service::controllers
@@ -50,34 +60,86 @@ namespace service::controllers
               if( body.has_string_field( "login" ) && body.has_string_field( "password" ) )
               {
                   const auto & userFilter = models::User( body );
-                  const auto foundUsers   = db->select< models::User >( userFilter );
+                  const auto & foundUsers = db->select< models::User >( userFilter );
 
                   if( foundUsers.size() == 1 )
                   {
                       const auto & user = foundUsers.at( 0 );
 
-                      const auto & session =
-                        models::Session( {}, randomString( 30 ), user.id(), message.remote_address(), currentTimestamp() );
+                      const auto & sessionFilter = models::Session( {}, {}, user.id(), message.remote_address(), {} );
+                      const auto & foundSessions = db->select< models::Session >( sessionFilter );
 
-                      if( db->insert( session ) )
+                      if( foundSessions.size() == 0 )
                       {
-                          response[ "token" ] = web::json::value::string( session.token().value() );
+                          const auto & newSession =
+                            models::Session( {}, randomString( 30 ), user.id(), message.remote_address(), currentTimestamp() );
 
-                          message.reply( web::http::status_codes::OK, response );
+                          if( db->insert( newSession ) )
+                          {
+                              response[ "token" ] = web::json::value::string( newSession.token().value() );
+
+                              message.reply( web::http::status_codes::OK, response );
+                              return;
+                          }
+                          else
+                          {
+                              /// @note probably not unique token
+                              message.reply( web::http::status_codes::InternalError, response );
+                              return;
+                          }
                       }
-                      else
+                      if( foundSessions.size() == 1 )
                       {
+                          const auto & foundSession = foundSessions.at( 0 );
+
+                          if( sessionIsStillValid( foundSession ) )
+                          {
+                              const auto & updatedSession = models::Session( foundSession.id().value(),
+                                foundSession.token().value(),
+                                foundSession.userId().value(),
+                                foundSession.ip().value(),
+                                currentTimestamp() );
+
+                              db->update< models::Session >( foundSession, updatedSession );
+
+                              response[ "token" ] = web::json::value::string( foundSession.token().value() );
+
+                              message.reply( web::http::status_codes::OK, response );
+                              return;
+                          }
+                          else
+                          {
+                              const auto & updatedSession = models::Session( foundSession.id().value(),
+                                randomString( 30 ),
+                                foundSession.userId().value(),
+                                foundSession.ip().value(),
+                                currentTimestamp() );
+
+                              db->update< models::Session >( foundSession, updatedSession );
+
+                              response[ "token" ] = web::json::value::string( updatedSession.token().value() );
+
+                              message.reply( web::http::status_codes::OK, response );
+                              return;
+                          }
+                      }
+                      else if( foundSessions.size() > 1 )
+                      {
+                          /// @todo remove all user sessions from DB
                           message.reply( web::http::status_codes::InternalError, response );
+                          return;
                       }
                   }
                   else
                   {
                       message.reply( web::http::status_codes::Unauthorized, response );
+                      return;
                   }
               }
               else
               {
                   message.reply( web::http::status_codes::BadRequest, response );
+                  return;
               }
           } )
           .wait();

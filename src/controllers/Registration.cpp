@@ -32,15 +32,18 @@ namespace service::controllers
                   if( db->insert( user ) )
                   {
                       message.reply( web::http::status_codes::Created, response );
+                      return;
                   }
                   else
                   {
                       message.reply( web::http::status_codes::Conflict, response );
+                      return;
                   }
               }
               else
               {
                   message.reply( web::http::status_codes::BadRequest, response );
+                  return;
               }
           } )
           .wait();

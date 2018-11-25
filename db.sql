@@ -17,3 +17,6 @@ CREATE TABLE sessions
  time    bigint NOT NULL
 );
 
+SELECT * FROM users;
+SELECT * FROM sessions;
+
