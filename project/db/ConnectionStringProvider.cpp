@@ -1,6 +1,6 @@
 #include "ConnectionStringProvider.hpp"
 
-#include "Configuration.hpp"
+#include "cfg/Configuration.hpp"
 
 #include <algorithm>
 #include <fstream>

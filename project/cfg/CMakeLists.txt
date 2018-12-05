@@ -1,7 +1,7 @@
 configure_file(Configuration.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/Configuration.cpp)
 
-file(GLOB SRC
+file(GLOB CFG_SRC
     *.hpp
     *.cpp)
 
-add_library(${CONFIG_LIB_NAME} STATIC ${SRC})
+add_library(${CFG_LIB_NAME} STATIC ${CFG_SRC})

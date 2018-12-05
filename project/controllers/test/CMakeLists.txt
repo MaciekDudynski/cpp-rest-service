@@ -1,9 +1,9 @@
-set(PLUGIN_NAME "test")
+set(TEST_CONTROLLER_LIB_NAME "test")
 
-file(GLOB SRC
+file(GLOB TEST_CONTROLLER_SRC
     *.hpp
     *.cpp)
 
-add_library(${PLUGIN_NAME} MODULE ${SRC})
+add_library(${TEST_CONTROLLER_LIB_NAME} MODULE ${TEST_CONTROLLER_SRC})
 
-target_link_libraries(${PLUGIN_NAME} ${BASE_PLUGIN_NAME})
+target_link_libraries(${TEST_CONTROLLER_LIB_NAME} ${BASE_CONTROLLER_LIB_NAME})
