@@ -8,6 +8,7 @@
 
 #include "controllers/About.hpp"
 #include "controllers/Login.hpp"
+#include "controllers/Logout.hpp"
 #include "controllers/Registration.hpp"
 
 namespace service
@@ -41,6 +42,8 @@ namespace service
         dispatcher->registerController( std::move( registrationController ) );
         auto loginController = std::make_unique< controllers::Login >( dbConnector );
         dispatcher->registerController( std::move( loginController ) );
+        auto logoutController = std::make_unique< controllers::Logout >( dbConnector );
+        dispatcher->registerController( std::move( logoutController ) );
 
         std::cout << "ListenerFactory is creating listener..." << std::endl;
 

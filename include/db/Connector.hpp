@@ -22,6 +22,8 @@ namespace service
 
             bool insert( const ModelIface & object ) const;
 
+            bool remove( const ModelIface & filter ) const;
+
             template< typename Model, typename = std::enable_if< std::is_base_of< ModelIface, Model >::value > >
             std::vector< Model > select( const ModelIface & filter ) const
             {

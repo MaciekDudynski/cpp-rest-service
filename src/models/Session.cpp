@@ -14,12 +14,6 @@ namespace service::models
     {
     }
 
-    Session::Session( const web::json::value & body, const std::string & ip )
-    {
-        _token = body.at( "token" ).as_string();
-        _ip    = ip;
-    }
-
     Session::Session( const pqxx::row & row )
     {
         _id        = row.at( row.column_number( "id" ) ).as< long >();

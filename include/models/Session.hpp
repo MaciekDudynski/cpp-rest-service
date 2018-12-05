@@ -22,7 +22,6 @@ namespace service::models
           std::optional< long > userId,
           std::optional< std::string > ip,
           std::optional< long > timestamp );
-        explicit Session( const web::json::value & body, const std::string & ip );
         explicit Session( const pqxx::row & row );
         ~Session() override;
 

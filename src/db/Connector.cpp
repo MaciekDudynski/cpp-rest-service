@@ -52,4 +52,35 @@ namespace service::db
         return true;
     }
 
+    bool Connector::remove( const ModelIface & filter ) const
+    {
+        const auto & serializedFilter = filter.serialize();
+
+        std::string cmd = "DELETE FROM " + filter.tableName() + " WHERE ";
+        for( auto lineIt = serializedFilter.begin(); lineIt != serializedFilter.end(); lineIt = std::next( lineIt ) )
+        {
+            if( lineIt != serializedFilter.begin() )
+            {
+                cmd += " AND ";
+            }
+            cmd += lineIt->first + "='" + lineIt->second + "'";
+        }
+
+        std::cout << "DB connector is executing command: " << cmd << std::endl;
+
+        pqxx::work job( *_connection );
+        try
+        {
+            job.exec( cmd );
+            job.commit();
+        }
+        catch( const std::exception & e )
+        {
+            std::cout << "DB connector command execution returned: " << e.what() << std::endl;
+            return false;
+        }
+
+        return true;
+    }
+
 } // namespace service::db
