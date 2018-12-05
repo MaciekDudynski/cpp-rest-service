@@ -3,34 +3,16 @@ cmake_minimum_required(VERSION 3.0.0)
 project(cpp-rest-service)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wconversion -pedantic -Wno-unknown-pragmas")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wconversion -pedantic -Wno-unknown-pragmas -fPIC")
 
-find_package(Boost REQUIRED COMPONENTS system thread log program_options chrono)
-find_package(Threads REQUIRED)
-find_package(OpenSSL 1.0.1 REQUIRED)
-find_package(cpprestsdk REQUIRED)
-#find_package(pqxx REQUIRED)
+include_directories(.)
 
-configure_file(config/Configuration.hpp.in ${CMAKE_SOURCE_DIR}/include/utils/Configuration.hpp)
+set(CONFIG_LIB_NAME "cfg")
+set(MODELS_LIB_NAME "models")
+set(DB_LIB_NAME "db")
 
-file(GLOB RestService_SRC
-    include/*.hpp
-    include/db/*.hpp
-    include/utils/*.hpp
-    include/controllers/*.hpp
-    include/models/*.hpp
-    src/*.cpp
-    src/db/*.cpp
-    src/utils/*.cpp
-    src/controllers/*.cpp
-    src/models/*.cpp)
-add_executable(${PROJECT_NAME} ${RestService_SRC})
-
-target_include_directories(${PROJECT_NAME}
-    PRIVATE
-    ${PROJECT_SOURCE_DIR}/include
-)
-
-target_link_libraries(${PROJECT_NAME} boost_system ssl crypto pthread cpprest pqxx)
-
-install(TARGETS ${PROJECT_NAME} DESTINATION .)
+add_subdirectory(cfg)
+add_subdirectory(models)
+add_subdirectory(controllers)
+add_subdirectory(db)
+add_subdirectory(core)

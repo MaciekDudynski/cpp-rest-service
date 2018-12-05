@@ -1,0 +1,9 @@
+#include "Configuration.hpp"
+
+namespace service::utils
+{
+    std::string install_path()
+    {
+        return "@CMAKE_INSTALL_PREFIX@";
+    }
+} // namespace service::utils
