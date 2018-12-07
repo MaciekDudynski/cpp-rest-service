@@ -1,3 +1,4 @@
+#include "ControllersManager.hpp"
 #include "Dispatcher.hpp"
 #include "Listener.hpp"
 #include "db/Connector.hpp"
@@ -29,7 +30,12 @@ int main()
     auto dbConnectorFactory = std::make_unique< service::db::ConnectorFactory >();
     auto dbConnector        = std::shared_ptr< service::db::Connector >( dbConnectorFactory->createConnector() );
 
-    std::cout << "Creating and registering controllers..." << std::endl;
+    std::cout << "Loading controllers..." << std::endl;
+
+    auto controllersManager = std::make_unique< service::ControllersManager >();
+    controllersManager->loadControllers();
+
+    std::cout << "Registering controllers..." << std::endl;
 
     //        auto aboutController = std::make_unique< controllers::About >( dbConnector );
     //        dispatcher->registerController( std::move( aboutController ) );
@@ -50,6 +56,10 @@ int main()
     service::utils::UserInterruptHandler::waitForUserInterrupt();
 
     listener->stop();
+
+    std::cout << "Unloading controllers..." << std::endl;
+
+    controllersManager->unloadControllers();
 
     return 0;
 }

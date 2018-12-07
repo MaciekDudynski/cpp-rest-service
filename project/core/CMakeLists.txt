@@ -12,7 +12,7 @@ file(GLOB CORE_SRC
 
 add_executable(${PROJECT_NAME} ${CORE_SRC})
 
-target_link_libraries(${PROJECT_NAME} boost_system ssl crypto pthread cpprest pqxx ${DB_LIB_NAME})
+target_link_libraries(${PROJECT_NAME} boost_system ssl crypto pthread cpprest pqxx stdc++fs ${CMAKE_DL_LIBS} ${CFG_LIB_NAME} ${DB_LIB_NAME})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION .)
 

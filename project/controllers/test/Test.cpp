@@ -5,9 +5,22 @@
 #include <cpprest/http_msg.h>
 #include <cpprest/json.h>
 
+extern "C"
+{
+    service::controllers::About * allocator()
+    {
+        return new service::controllers::About();
+    }
+
+    void deleter( service::controllers::About * ptr )
+    {
+        delete ptr;
+    }
+}
+
 namespace service::controllers
 {
-    About::About( std::shared_ptr< db::Connector > dbConnector ) : ControllerBase( "/about", dbConnector )
+    About::About() : ControllerBase( "/about" )
     {
     }
 

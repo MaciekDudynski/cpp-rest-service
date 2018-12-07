@@ -12,7 +12,7 @@ namespace service::controllers
     class About : public ControllerBase
     {
       public:
-        About( std::shared_ptr< db::Connector > dbConnector );
+        About();
         ~About() override;
 
       private:
