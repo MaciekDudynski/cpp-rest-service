@@ -27,7 +27,7 @@ int main()
 
     std::cout << "Loading controllers..." << std::endl;
 
-    auto controllersManager = std::make_unique< service::ControllersManager >();
+    auto controllersManager = std::make_unique< service::ControllersManager >( dbConnector );
     controllersManager->loadControllers();
 
     std::cout << "Registering controllers..." << std::endl;

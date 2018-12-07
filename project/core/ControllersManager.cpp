@@ -8,13 +8,17 @@
 
 namespace service
 {
+    ControllersManager::ControllersManager( std::shared_ptr< db::Connector > dbConnector ) : _dbConnector{ dbConnector }
+    {
+    }
+
     void ControllersManager::loadControllers()
     {
         for( auto & lib : std::filesystem::directory_iterator( utils::install_path() + "/controllers" ) )
         {
             std::cout << "Creating loader for: " << lib << std::endl;
 
-            _loaders.emplace( lib.path(), ControllerLoader( lib.path() ) );
+            _loaders.emplace( lib.path(), ControllerLoader( lib.path(), _dbConnector ) );
         }
         for( auto & loader : _loaders )
         {

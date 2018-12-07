@@ -14,7 +14,7 @@ namespace service
     class ControllerLoader
     {
       public:
-        ControllerLoader( std::string const & pathToLib );
+        ControllerLoader( std::string const & pathToLib, std::shared_ptr< service::db::Connector > dbConnector );
 
         ~ControllerLoader() = default;
 
@@ -27,5 +27,6 @@ namespace service
       private:
         void * _handle;
         std::string _pathToLib;
+        std::shared_ptr< service::db::Connector > _dbConnector;
     };
 } // namespace service

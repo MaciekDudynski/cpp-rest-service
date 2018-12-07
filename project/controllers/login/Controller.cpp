@@ -1,13 +1,24 @@
-#include "controllers/Login.hpp"
+#include "Controller.hpp"
 
 #include "db/Connector.hpp"
 #include "models/Session.hpp"
 #include "models/User.hpp"
 
-#include <chrono>
 #include <cpprest/http_msg.h>
 #include <cpprest/json.h>
-#include <iostream>
+
+extern "C"
+{
+    service::controllers::Controller * allocator( std::shared_ptr< service::db::Connector > dbConnector )
+    {
+        return new service::controllers::Controller( dbConnector );
+    }
+
+    void deleter( service::controllers::Controller * ptr )
+    {
+        delete ptr;
+    }
+}
 
 namespace
 {
@@ -41,15 +52,11 @@ namespace
 
 namespace service::controllers
 {
-    Login::Login( std::shared_ptr< db::Connector > dbConnector ) : ControllerBase( "/login", dbConnector )
+    Controller::Controller( std::shared_ptr< db::Connector > dbConnector ) : ControllerBase( "/login", dbConnector )
     {
     }
 
-    Login::~Login()
-    {
-    }
-
-    void Login::handlePost( const web::http::http_request & message ) const
+    void Controller::handlePost( const web::http::http_request & message ) const
     {
         std::cout << "Login controller is handling message..." << std::endl;
 

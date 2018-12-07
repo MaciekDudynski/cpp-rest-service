@@ -9,11 +9,11 @@ namespace web::json
 
 namespace service::controllers
 {
-    class About : public ControllerBase
+    class Controller : public ControllerBase
     {
       public:
-        About();
-        ~About() override;
+        Controller( std::shared_ptr< db::Connector > dbConnector );
+        ~Controller() override = default;
 
       private:
         void handleGet( const web::http::http_request & message ) const override;

@@ -1,0 +1,11 @@
+set(CONTROLLER_LIB_NAME "logout")
+
+file(GLOB CONTROLLER_SRC
+    *.hpp
+    *.cpp)
+
+add_library(${CONTROLLER_LIB_NAME} MODULE ${CONTROLLER_SRC})
+
+target_link_libraries(${CONTROLLER_LIB_NAME} ${BASE_CONTROLLER_LIB_NAME} ${MODELS_LIB_NAME})
+
+install(TARGETS ${CONTROLLER_LIB_NAME} DESTINATION controllers)

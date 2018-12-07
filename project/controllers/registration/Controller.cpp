@@ -1,23 +1,31 @@
-#include "controllers/Registration.hpp"
+#include "Controller.hpp"
 
 #include "db/Connector.hpp"
 #include "models/User.hpp"
 
 #include <cpprest/http_msg.h>
 #include <cpprest/json.h>
-#include <iostream>
+
+extern "C"
+{
+    service::controllers::Controller * allocator( std::shared_ptr< service::db::Connector > dbConnector )
+    {
+        return new service::controllers::Controller( dbConnector );
+    }
+
+    void deleter( service::controllers::Controller * ptr )
+    {
+        delete ptr;
+    }
+}
 
 namespace service::controllers
 {
-    Registration::Registration( std::shared_ptr< db::Connector > dbConnector ) : ControllerBase( "/registration", dbConnector )
+    Controller::Controller( std::shared_ptr< db::Connector > dbConnector ) : ControllerBase( "/about", dbConnector )
     {
     }
 
-    Registration::~Registration()
-    {
-    }
-
-    void Registration::handlePost( const web::http::http_request & message ) const
+    void Controller::handlePost( const web::http::http_request & message ) const
     {
         std::cout << "Registration controller is handling message..." << std::endl;
 

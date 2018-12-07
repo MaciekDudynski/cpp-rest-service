@@ -7,17 +7,13 @@
 
 namespace service
 {
-    ControllerBase::ControllerBase( const std::string & relativePath ) : _relativePath{ relativePath }, _dbConnector{ nullptr }
+    ControllerBase::ControllerBase( const std::string & relativePath, std::shared_ptr< db::Connector > dbConnector )
+     : _relativePath{ relativePath }, _dbConnector{ dbConnector }
     {
     }
 
     ControllerBase::~ControllerBase()
     {
-    }
-
-    void ControllerBase::setDbConnector( std::shared_ptr< db::Connector > dbConnector )
-    {
-        _dbConnector = dbConnector;
     }
 
     void ControllerBase::handleMessage( const web::http::http_request & message ) const

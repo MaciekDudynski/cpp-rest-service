@@ -7,7 +7,8 @@
 
 namespace service
 {
-    ControllerLoader::ControllerLoader( const std::string & pathToLib ) : _handle( nullptr ), _pathToLib( pathToLib )
+    ControllerLoader::ControllerLoader( const std::string & pathToLib, std::shared_ptr< service::db::Connector > dbConnector )
+     : _handle( nullptr ), _pathToLib( pathToLib ), _dbConnector{ dbConnector }
     {
     }
 
@@ -21,7 +22,7 @@ namespace service
 
     std::shared_ptr< ControllerIface > ControllerLoader::DLGetInstance()
     {
-        using allocClass  = ControllerIface * ( * ) ();
+        using allocClass  = ControllerIface * ( * ) ( std::shared_ptr< service::db::Connector > dbConnector );
         using deleteClass = void ( * )( ControllerIface * );
 
         auto allocFunc  = reinterpret_cast< allocClass >( dlsym( _handle, "allocator" ) );
@@ -33,7 +34,7 @@ namespace service
             std::cerr << dlerror() << std::endl;
         }
 
-        return std::shared_ptr< ControllerIface >( allocFunc(), [deleteFunc]( ControllerIface * p ) { deleteFunc( p ); } );
+        return std::shared_ptr< ControllerIface >( allocFunc( _dbConnector ), [deleteFunc]( ControllerIface * p ) { deleteFunc( p ); } );
     }
 
     void ControllerLoader::DLCloseLib()

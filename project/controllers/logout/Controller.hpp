@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ControllerBase.hpp"
+#include "controllers/base/ControllerBase.hpp"
 
 namespace web::json
 {
@@ -9,11 +9,11 @@ namespace web::json
 
 namespace service::controllers
 {
-    class Logout : public ControllerBase
+    class Controller : public ControllerBase
     {
       public:
-        Logout( std::shared_ptr< db::Connector > dbConnector );
-        ~Logout() override;
+        Controller( std::shared_ptr< db::Connector > dbConnector );
+        ~Controller() override = default;
 
       private:
         void handlePost( const web::http::http_request & message ) const override;

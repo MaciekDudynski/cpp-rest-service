@@ -1,4 +1,4 @@
-#include "Test.hpp"
+#include "Controller.hpp"
 
 #include "db/Connector.hpp"
 
@@ -7,12 +7,12 @@
 
 extern "C"
 {
-    service::controllers::About * allocator()
+    service::controllers::Controller * allocator( std::shared_ptr< service::db::Connector > dbConnector )
     {
-        return new service::controllers::About();
+        return new service::controllers::Controller( dbConnector );
     }
 
-    void deleter( service::controllers::About * ptr )
+    void deleter( service::controllers::Controller * ptr )
     {
         delete ptr;
     }
@@ -20,15 +20,11 @@ extern "C"
 
 namespace service::controllers
 {
-    About::About() : ControllerBase( "/about" )
+    Controller::Controller( std::shared_ptr< db::Connector > dbConnector ) : ControllerBase( "/about", dbConnector )
     {
     }
 
-    About::~About()
-    {
-    }
-
-    void About::handleGet( const web::http::http_request & message ) const
+    void Controller::handleGet( const web::http::http_request & message ) const
     {
         auto response              = web::json::value::object();
         response[ "service_name" ] = web::json::value::string( "cpp-rest-service" );
