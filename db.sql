@@ -1,3 +1,7 @@
+# psql -u postgres
+# CREATE DATABASE service;
+# \c service
+
 DROP TABLE sessions;
 DROP TABLE users;
 
