@@ -11,10 +11,15 @@ namespace service
     {
         for( auto & lib : std::filesystem::directory_iterator( utils::install_path() + "/controllers" ) )
         {
-            std::cout << "Loading: " << lib << std::endl;
+            std::cout << "Creating loader for: " << lib << std::endl;
 
             _controllers.emplace( lib.path(), ControllerLoader( lib.path() ) );
-            _controllers.end()->second.DLOpenLib();
+        }
+        for( auto & controller : _controllers )
+        {
+            std::cout << "Loading: " << controller.first << std::endl;
+
+            controller.second.DLOpenLib();
         }
     }
 
