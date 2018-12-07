@@ -6,11 +6,6 @@
 #include "utils/NetworkInfoProvider.hpp"
 #include "utils/UserInterruptHandler.hpp"
 
-//#include "controllers/About.hpp"
-//#include "controllers/Login.hpp"
-//#include "controllers/Logout.hpp"
-//#include "controllers/Registration.hpp"
-
 #include <iostream>
 
 int main()
@@ -37,14 +32,7 @@ int main()
 
     std::cout << "Registering controllers..." << std::endl;
 
-    //        auto aboutController = std::make_unique< controllers::About >( dbConnector );
-    //        dispatcher->registerController( std::move( aboutController ) );
-    //        auto registrationController = std::make_unique< controllers::Registration >( dbConnector );
-    //        dispatcher->registerController( std::move( registrationController ) );
-    //        auto loginController = std::make_unique< controllers::Login >( dbConnector );
-    //        dispatcher->registerController( std::move( loginController ) );
-    //        auto logoutController = std::make_unique< controllers::Logout >( dbConnector );
-    //        dispatcher->registerController( std::move( logoutController ) );
+    controllersManager->registerControllers( *dispatcher );
 
     std::cout << "Creating listener..." << std::endl;
 

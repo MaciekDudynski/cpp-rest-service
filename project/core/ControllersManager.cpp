@@ -1,6 +1,7 @@
 #include "ControllersManager.hpp"
 
 #include "cfg/Configuration.hpp"
+#include "core/DispatcherIface.hpp"
 
 #include <filesystem>
 #include <iostream>
@@ -13,25 +14,34 @@ namespace service
         {
             std::cout << "Creating loader for: " << lib << std::endl;
 
-            _controllers.emplace( lib.path(), ControllerLoader( lib.path() ) );
+            _loaders.emplace( lib.path(), ControllerLoader( lib.path() ) );
         }
-        for( auto & controller : _controllers )
+        for( auto & loader : _loaders )
         {
-            std::cout << "Loading: " << controller.first << std::endl;
+            std::cout << "Loading: " << loader.first << std::endl;
 
-            controller.second.DLOpenLib();
+            loader.second.DLOpenLib();
+            _controllers.emplace( loader.first, loader.second.DLGetInstance() );
         }
     }
 
-    // _controllers.end()->second.DLGetInstance();
+    void ControllersManager::registerControllers( DispatcherIface & dispatcher )
+    {
+        for( const auto & controller : _controllers )
+        {
+            dispatcher.registerController( controller.second.get() );
+        }
+    }
 
     void ControllersManager::unloadControllers()
     {
-        for( auto & controller : _controllers )
+        for( auto & loader : _loaders )
         {
-            std::cout << "Unloading: " << controller.first << std::endl;
+            std::cout << "Unloading: " << loader.first << std::endl;
 
-            controller.second.DLCloseLib();
+            _controllers.erase( loader.first );
+            loader.second.DLCloseLib();
+            _loaders.erase( loader.first );
         }
     }
 

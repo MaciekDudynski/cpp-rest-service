@@ -18,11 +18,11 @@ namespace service
 
         //        std::vector< std::string > requestPath( const web::http::http_request & message ) const;
 
-        void registerController( std::unique_ptr< ControllerIface > controller ) override;
+        void registerController( const ControllerIface * controller ) override;
 
         void handleMessage( const web::http::http_request & message ) const override;
 
       private:
-        std::map< std::string, std::unique_ptr< ControllerIface > > _registeredControllers;
+        std::map< std::string, const ControllerIface * > _registeredControllers;
     };
 } // namespace service

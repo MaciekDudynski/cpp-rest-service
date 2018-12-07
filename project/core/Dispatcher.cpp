@@ -20,9 +20,9 @@ namespace service
     //        return web::uri::split_path( relativePath );
     //    }
 
-    void Dispatcher::registerController( std::unique_ptr< ControllerIface > controller )
+    void Dispatcher::registerController( const ControllerIface * controller )
     {
-        _registeredControllers.emplace( controller->relativePath(), std::move( controller ) );
+        _registeredControllers.emplace( controller->relativePath(), controller );
     }
 
     void Dispatcher::handleMessage( const web::http::http_request & message ) const

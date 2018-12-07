@@ -9,6 +9,7 @@ namespace service
 {
     class ControllerLoader;
     class ControllerIface;
+    class DispatcherIface;
 
     class ControllersManager
     {
@@ -17,9 +18,11 @@ namespace service
         ~ControllersManager()         = default;
 
         void loadControllers();
+        void registerControllers( DispatcherIface & dispatcher );
         void unloadControllers();
 
       private:
-        std::map< std::string, ControllerLoader > _controllers;
+        std::map< std::string, ControllerLoader > _loaders                       = {};
+        std::map< std::string, std::shared_ptr< ControllerIface > > _controllers = {};
     };
 } // namespace service
