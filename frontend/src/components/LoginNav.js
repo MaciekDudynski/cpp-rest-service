@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-	Nav, NavItem, NavLink, Form, Button
+	Nav, NavItem, NavLink,
+	Form, Button
 } from 'reactstrap';
 import LoginDropdown from './LoginDropdown';
 import RegisterDropdown from './RegisterDropdown';

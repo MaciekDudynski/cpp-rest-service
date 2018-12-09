@@ -1,12 +1,8 @@
 import React from 'react';
 import {
-	UncontrolledDropdown,
-	DropdownToggle,
-	DropdownMenu,
 	Col,
-	Button,
-	Form, FormGroup,
-	Input
+	UncontrolledDropdown, DropdownToggle, DropdownMenu,
+	FormGroup, Form, Button, Input
 } from 'reactstrap';
 
 export default class LoginDropdown extends React.Component {
@@ -15,11 +11,19 @@ export default class LoginDropdown extends React.Component {
 
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.setDefaultViewTimeout = null;
 
 		this.state = {
 			login: '',
-			password: ''
+			password: '',
+			text: 'Login',
+			color: 'info',
+			enabled: true
 		};
+	}
+
+	componentWillUnmount() {
+		clearTimeout(this.setDefaultViewTimeout);
 	}
 
 	handleInputChange(event) {
@@ -30,14 +34,25 @@ export default class LoginDropdown extends React.Component {
 
 	handleSubmit(event) {
 		event.preventDefault();
-		this.props.handleLogin(this.state.login, this.state.password);
+		this.props.handleLogin(this.state.login, this.state.password)
+			.then(returnCode => {
+				if (returnCode === 200) {
+					this.setState({ text: 'Logged successfully', color: 'success', enabled: false })
+				} else if (returnCode === 401) {
+					this.setState({ text: 'Invalid login or password', color: 'danger', enabled: false })
+				} else {
+					this.setState({ text: 'Unknown error', color: 'danger', enabled: false })
+				}
+				this.setDefaultViewTimeout = setTimeout(function () { this.setState({ text: 'Login', color: 'info', enabled: true }); }
+					.bind(this), 3000);
+			});
 	}
 
 	render() {
 		return (
 			<UncontrolledDropdown nav inNavbar>
 				<DropdownToggle nav>
-					<Button outline color='success'>Login</Button>
+					<Button outline color='info'>Login</Button>
 				</DropdownToggle>
 				<DropdownMenu right className='login-dropdown'>
 					<Form onSubmit={this.handleSubmit}>
@@ -52,7 +67,7 @@ export default class LoginDropdown extends React.Component {
 									<Input type='password' name='password' placeholder='Password' onChange={this.handleInputChange} />
 								</Col>
 							</FormGroup>
-							<Button block outline color='success'>Login</Button>
+							<Button block outline color={this.state.color} disabled={!this.state.enabled}>{this.state.text}</Button>
 						</Col>
 					</Form>
 				</DropdownMenu>

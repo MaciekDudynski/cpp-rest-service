@@ -1,12 +1,8 @@
 import React from 'react';
 import {
-	UncontrolledDropdown,
-	DropdownToggle,
-	DropdownMenu,
 	Col,
-	Button,
-	Form, FormGroup,
-	Input
+	UncontrolledDropdown, DropdownToggle, DropdownMenu,
+	FormGroup, Form, Button, Input
 } from 'reactstrap';
 
 export default class RegisterDropdown extends React.Component {
@@ -15,6 +11,7 @@ export default class RegisterDropdown extends React.Component {
 
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.setDefaultViewTimeout = null;
 
 		this.state = {
 			login: '',
@@ -23,6 +20,10 @@ export default class RegisterDropdown extends React.Component {
 			color: 'info',
 			enabled: true
 		};
+	}
+
+	componentWillUnmount() {
+		clearTimeout(this.setDefaultViewTimeout);
 	}
 
 	handleInputChange(event) {
@@ -35,15 +36,14 @@ export default class RegisterDropdown extends React.Component {
 		event.preventDefault();
 		this.props.handleRegister(this.state.login, this.state.password)
 			.then(returnCode => {
-				console.log('RegisterDropdown got: ' + returnCode);
 				if (returnCode === 201) {
-					this.setState({ text: 'Successfully registered', color: 'success', enabled: false })
+					this.setState({ text: 'Registered successfully', color: 'success', enabled: false })
 				} else if (returnCode === 409) {
 					this.setState({ text: 'Login already taken', color: 'danger', enabled: false })
 				} else {
 					this.setState({ text: 'Unknown error', color: 'danger', enabled: false })
 				}
-				setTimeout(function () { this.setState({ text: 'Register', color: 'info', enabled: true }); }
+				this.setDefaultViewTimeout = setTimeout(function () { this.setState({ text: 'Register', color: 'info', enabled: true }); }
 					.bind(this), 3000);
 			});
 	}

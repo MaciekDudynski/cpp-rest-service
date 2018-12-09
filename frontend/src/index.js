@@ -98,7 +98,7 @@ class Body extends React.Component {
     };
   }
 
-  handleRegister(login, password) {
+  async handleRegister(login, password) {
     return fetch('http://127.0.1.1:6502/api/registration', {
       method: 'POST',
       headers: {
@@ -109,25 +109,56 @@ class Body extends React.Component {
         'login': login,
         'password': password
       })
-    })
-      .then(res => {
-        return res.status;
-        // if (res.ok) {
-        //   return res; //.json();
-        // } else {
-        //   throw Error(res.statusText);
-        // }
+    }).then(res => {
+      return res.status;
+    });
+  }
+
+  async handleLogin(login, password) {
+    return fetch('http://127.0.1.1:6502/api/login', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        'login': login,
+        'password': password
       })
-      .catch(error => console.error(error));
+    }).then(res => {
+      if (res.ok) {
+        res.json().then(body => {
+          this.setState({
+            isLogedIn: true,
+            userLogin: login,
+            userToken: body['token'],
+          })
+        });
+      }
+      return res.status;
+    });
   }
 
-  handleLogin(login, password) {
-    alert('Login: ' + login + '   Pw: ' + password);
-    this.setState({ isLogedIn: true, userLogin: 'test' });
-  }
-
-  handleLogout() {
-    this.setState({ isLogedIn: false, userLogin: '' });
+  async handleLogout() {
+    return fetch('http://127.0.1.1:6502/api/logout', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        'token': this.state.userToken,
+      })
+    }).then(res => {
+      if (res.ok) {
+        this.setState({
+          isLogedIn: false,
+          userLogin: '',
+          userToken: '',
+        });
+      }
+      return res.status;
+    });
   }
 
   handleButtonClick() {

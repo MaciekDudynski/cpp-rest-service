@@ -1,13 +1,9 @@
 import React from 'react';
 import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
   Container,
+  Collapse,
+  Navbar, NavbarBrand, NavbarToggler,
+  Nav, NavItem, NavLink,
 } from 'reactstrap';
 import LoginNav from './LoginNav';
 
@@ -48,7 +44,7 @@ export default class NavigationBar extends React.Component {
               handleLogout={this.props.handleLogout} />
           </Collapse>
         </Container>
-      </Navbar >
+      </Navbar>
     );
   }
 }
