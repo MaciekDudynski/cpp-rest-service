@@ -8,6 +8,13 @@ namespace web::http::experimental::listener
 {
     class http_listener;
 }
+namespace web
+{
+    namespace http
+    {
+        class http_request;
+    }
+} // namespace web
 
 namespace service
 {
@@ -30,6 +37,8 @@ namespace service
         void stop() override;
 
       private:
+        void handleOptions( const web::http::http_request & message ) const;
+
         std::unique_ptr< utils::NetworkInfoProviderIface > _networkInfoProvider;
         std::unique_ptr< DispatcherIface > _dispatcher;
         std::unique_ptr< web::http::experimental::listener::http_listener > _listener;

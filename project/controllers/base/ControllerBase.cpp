@@ -41,17 +41,17 @@ namespace service
 
     void ControllerBase::handleGet( const web::http::http_request & message ) const
     {
-        message.reply( web::http::status_codes::NotImplemented, responseNotImpl( message ) );
+        sendResponse( message, web::http::status_codes::NotImplemented, responseNotImpl( message ) );
     }
 
     void ControllerBase::handlePost( const web::http::http_request & message ) const
     {
-        message.reply( web::http::status_codes::NotImplemented, responseNotImpl( message ) );
+        sendResponse( message, web::http::status_codes::NotImplemented, responseNotImpl( message ) );
     }
 
     void ControllerBase::handleUnknown( const web::http::http_request & message ) const
     {
-        message.reply( web::http::status_codes::NotImplemented, responseNotImpl( message ) );
+        sendResponse( message, web::http::status_codes::NotImplemented, responseNotImpl( message ) );
     }
 
     web::json::value ControllerBase::responseNotImpl( const web::http::http_request & message ) const
@@ -62,4 +62,20 @@ namespace service
         response[ "http_method" ]   = web::json::value::string( message.method() );
         return response;
     }
+
+    void sendResponse( const web::http::http_request & message, const unsigned short & statusCode )
+    {
+        web::http::http_response response( statusCode );
+        response.headers().add( U( "Access-Control-Allow-Origin" ), U( "*" ) );
+        message.reply( response );
+    }
+
+    void sendResponse( const web::http::http_request & message, const unsigned short & statusCode, const web::json::value & body )
+    {
+        web::http::http_response response( statusCode );
+        response.headers().add( U( "Access-Control-Allow-Origin" ), U( "*" ) );
+        response.set_body( body );
+        message.reply( response );
+    }
+
 } // namespace service

@@ -35,6 +35,8 @@ namespace service
 
         _listener = std::make_unique< web::http::experimental::listener::http_listener >( endpointBuilder.to_uri() );
 
+        _listener->support(
+          web::http::methods::OPTIONS, [& listner = *this]( const auto && message ) { listner.handleOptions( message ); } );
         _listener->support( [& dispatcher = *_dispatcher]( const auto && message ) { dispatcher.handleMessage( message ); } );
     }
 
@@ -73,6 +75,16 @@ namespace service
                 std::cout << "Listener already stopped." << std::endl;
                 break;
         }
+    }
+
+    void Listener::handleOptions( const web::http::http_request & message ) const
+    {
+        web::http::http_response response( web::http::status_codes::OK );
+        response.headers().add( U( "Allow" ), U( "GET, POST, OPTIONS" ) );
+        response.headers().add( U( "Access-Control-Allow-Origin" ), U( "*" ) );
+        response.headers().add( U( "Access-Control-Allow-Methods" ), U( "GET, POST, OPTIONS" ) );
+        response.headers().add( U( "Access-Control-Allow-Headers" ), U( "Content-Type" ) );
+        message.reply( response );
     }
 
 } // namespace service

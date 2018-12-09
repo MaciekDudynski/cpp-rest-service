@@ -21,7 +21,7 @@ extern "C"
 
 namespace service::controllers
 {
-    Controller::Controller( std::shared_ptr< db::Connector > dbConnector ) : ControllerBase( "/about", dbConnector )
+    Controller::Controller( std::shared_ptr< db::Connector > dbConnector ) : ControllerBase( "/logout", dbConnector )
     {
     }
 
@@ -39,7 +39,7 @@ namespace service::controllers
 
                   if( foundSessions.size() == 0 )
                   {
-                      message.reply( web::http::status_codes::Unauthorized );
+                      sendResponse( message, web::http::status_codes::Unauthorized );
                       return;
                   }
                   else if( foundSessions.size() == 1 )
@@ -48,25 +48,25 @@ namespace service::controllers
 
                       if( db->remove( session ) )
                       {
-                          message.reply( web::http::status_codes::OK );
+                          sendResponse( message, web::http::status_codes::OK );
                           return;
                       }
                       else
                       {
-                          message.reply( web::http::status_codes::InternalError );
+                          sendResponse( message, web::http::status_codes::InternalError );
                           return;
                       }
                   }
                   else
                   {
                       /// @todo remove all user sessions from DB
-                      message.reply( web::http::status_codes::InternalError );
+                      sendResponse( message, web::http::status_codes::InternalError );
                       return;
                   }
               }
               else
               {
-                  message.reply( web::http::status_codes::BadRequest );
+                  sendResponse( message, web::http::status_codes::BadRequest );
                   return;
               }
           } )

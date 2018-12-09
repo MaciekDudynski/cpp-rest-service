@@ -71,7 +71,7 @@ namespace service::controllers
 
                   if( foundUsers.size() == 0 )
                   {
-                      message.reply( web::http::status_codes::Unauthorized, response );
+                      sendResponse( message, web::http::status_codes::Unauthorized, response );
                       return;
                   }
                   if( foundUsers.size() == 1 )
@@ -90,13 +90,13 @@ namespace service::controllers
                           {
                               response[ "token" ] = web::json::value::string( newSession.token().value() );
 
-                              message.reply( web::http::status_codes::OK, response );
+                              sendResponse( message, web::http::status_codes::OK, response );
                               return;
                           }
                           else
                           {
                               /// @note probably not unique token
-                              message.reply( web::http::status_codes::InternalError, response );
+                              sendResponse( message, web::http::status_codes::InternalError, response );
                               return;
                           }
                       }
@@ -116,13 +116,13 @@ namespace service::controllers
                               {
                                   response[ "token" ] = web::json::value::string( foundSession.token().value() );
 
-                                  message.reply( web::http::status_codes::OK, response );
+                                  sendResponse( message, web::http::status_codes::OK, response );
                                   return;
                               }
                               else
                               {
                                   /// @note probably not unique token
-                                  message.reply( web::http::status_codes::InternalError, response );
+                                  sendResponse( message, web::http::status_codes::InternalError, response );
                                   return;
                               }
                           }
@@ -138,13 +138,13 @@ namespace service::controllers
                               {
                                   response[ "token" ] = web::json::value::string( updatedSession.token().value() );
 
-                                  message.reply( web::http::status_codes::OK, response );
+                                  sendResponse( message, web::http::status_codes::OK, response );
                                   return;
                               }
                               else
                               {
                                   /// @note probably not unique token
-                                  message.reply( web::http::status_codes::InternalError, response );
+                                  sendResponse( message, web::http::status_codes::InternalError, response );
                                   return;
                               }
                           }
@@ -152,19 +152,19 @@ namespace service::controllers
                       else if( foundSessions.size() > 1 )
                       {
                           /// @todo remove all user sessions from DB
-                          message.reply( web::http::status_codes::InternalError, response );
+                          sendResponse( message, web::http::status_codes::InternalError, response );
                           return;
                       }
                   }
                   else
                   {
-                      message.reply( web::http::status_codes::InternalError, response );
+                      sendResponse( message, web::http::status_codes::InternalError, response );
                       return;
                   }
               }
               else
               {
-                  message.reply( web::http::status_codes::BadRequest, response );
+                  sendResponse( message, web::http::status_codes::BadRequest, response );
                   return;
               }
           } )

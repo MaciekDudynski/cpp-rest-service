@@ -21,7 +21,7 @@ extern "C"
 
 namespace service::controllers
 {
-    Controller::Controller( std::shared_ptr< db::Connector > dbConnector ) : ControllerBase( "/about", dbConnector )
+    Controller::Controller( std::shared_ptr< db::Connector > dbConnector ) : ControllerBase( "/registration", dbConnector )
     {
     }
 
@@ -39,18 +39,18 @@ namespace service::controllers
 
                   if( db->insert( user ) )
                   {
-                      message.reply( web::http::status_codes::Created, response );
+                      sendResponse( message, web::http::status_codes::Created, response );
                       return;
                   }
                   else
                   {
-                      message.reply( web::http::status_codes::Conflict, response );
+                      sendResponse( message, web::http::status_codes::Conflict, response );
                       return;
                   }
               }
               else
               {
-                  message.reply( web::http::status_codes::BadRequest, response );
+                  sendResponse( message, web::http::status_codes::BadRequest, response );
                   return;
               }
           } )

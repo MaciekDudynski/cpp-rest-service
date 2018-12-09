@@ -4,10 +4,14 @@
 
 #include <memory>
 
-namespace web::json
+namespace web
 {
-    class value;
-}
+    namespace json
+    {
+        class value;
+    }
+
+} // namespace web
 
 namespace service
 {
@@ -15,6 +19,9 @@ namespace service
     {
         class Connector;
     }
+
+    void sendResponse( const web::http::http_request & message, const unsigned short & statusCode );
+    void sendResponse( const web::http::http_request & message, const unsigned short & statusCode, const web::json::value & body );
 
     class ControllerBase : public ControllerIface
     {
@@ -31,6 +38,7 @@ namespace service
         virtual void handlePost( const web::http::http_request & message ) const;
 
         void handleUnknown( const web::http::http_request & message ) const;
+
         web::json::value responseNotImpl( const web::http::http_request & message ) const;
 
         std::string _relativePath;
